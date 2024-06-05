@@ -24,13 +24,24 @@ Order
     |
 Payment (PaymentID, PaymentDate, Amount, PaymentMethod)
 
-CREATE OR REPLACE PROCEDURE CalculateSquare(
-    number IN NUMBER,
+CREATE OR REPLACE PROCEDURE calculate_square (
+    num IN NUMBER,
     square OUT NUMBER
-) IS
+)
+IS
 BEGIN
-    square := number * number;
+    square := num * num;
 END;
+/
+DECLARE
+    input_num NUMBER := &input_num;
+    result_square NUMBER;
+BEGIN
+    calculate_square(input_num, result_square);
+    DBMS_OUTPUT.PUT_LINE('Square of ' || input_num || ' is: ' || result_square);
+END;
+/
+
 
 SELECT SupplierID, SupplierName FROM Supplier WHERE SupplierName LIKE 'R%';
 SELECT SupplierName FROM Supplier 
