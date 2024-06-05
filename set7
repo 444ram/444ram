@@ -1,1 +1,91 @@
++--------------+   +--------------+   +--------------+
+|    Hotel     |   |    Room      |   |    Guest     |
+|--------------|   |--------------|   |--------------|
+| Hotel_ID (PK)|---| Room_ID (PK) |   | Guest_ID (PK)|
+| Name         |   | Room_Number  |   | First_Name   |
+| Location     |   | Type         |   | Last_Name    |
++--------------+   | Price        |   | Phone        |
+                   | Hotel_ID (FK)|   | Email        |
+                   +--------------+   +--------------+
+                       |
+                       |
+                       |
+                       |
+                   +--------------+
+                   | Reservation  |
+                   |--------------|
+                   | Reservation_ID (PK)|
+                   | Date_From    |
+                   | Date_To      |
+                   | Room_ID (FK) |
+                   | Guest_ID (FK)|
+                   +--------------+
+                       |
+                       |
+                       |
+                       |
+                   +--------------+
+                   |   Payment    |
+                   |--------------|
+                   | Payment_ID (PK)|
+                   | Amount       |
+                   | Payment_Date |
+                   | Reservation_ID (FK)|
+                   +--------------+
+
++--------------+     +--------------+
+|    Staff     |     |   Service    |
+|--------------|     |--------------|
+| Staff_ID (PK)|     | Service_ID (PK)|
+| First_Name   |     | Description  |
+| Last_Name    |     | Price        |
+| Role         |-----| Room_ID (FK) |
+| Hotel_ID (FK)|     | Staff_ID (FK)|
++--------------+     +--------------+
+
+
+CREATE OR REPLACE TRIGGER PrintSalaryChanges
+AFTER UPDATE OF salary ON Employees
+FOR EACH ROW
+DECLARE
+    old_salary NUMBER;
+    new_salary NUMBER;
+BEGIN
+    old_salary := :OLD.salary;
+    new_salary := :NEW.salary;
+    DBMS_OUTPUT.PUT_LINE('Salary changed from ' || old_salary || ' to ' || new_salary);
+END;
+/
+
+-- To enable output in SQL*Plus or SQL Developer
+SET SERVEROUTPUT ON;
+
+SELECT Course_Name
+FROM Courses
+WHERE Credit_Hours > (SELECT AVG(Credit_Hours) FROM Courses);
+SELECT * 
+FROM Students 
+WHERE Last_Name LIKE 'D%';
+UPDATE Courses
+SET Instructor_Name = 'New Instructor'
+WHERE Course_ID = specific_course_id;
+CREATE VIEW HighGPAStudents AS
+SELECT * 
+FROM Students 
+WHERE GPA > 3.8;
+SELECT DISTINCT Courses.Course_Name
+FROM Courses
+JOIN Enrollment ON Courses.Course_ID = Enrollment.Course_ID
+JOIN Students ON Enrollment.Student_ID = Students.Student_ID
+WHERE Students.GPA > 3.8;
+SELECT Student_ID
+FROM Enrollment
+GROUP BY Student_ID
+HAVING COUNT(Course_ID) > 1;
+SELECT COUNT(DISTINCT Enrollment.Student_ID)
+FROM Enrollment
+JOIN Courses ON Enrollment.Course_ID = Courses.Course_ID
+WHERE Courses.Credit_Hours < 4;
+ALTER TABLE Students
+ADD Rank VARCHAR2(10);
 
