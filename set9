@@ -1,0 +1,91 @@
++-------------+   +------------+   +-----------+
+|    Train    |   |  Station   |   | Passenger |
+|-------------|   |------------|   |-----------|
+| Train_ID(PK)|---| Station_ID |---| Passenger_ID |
+| Name        |   | Name       |   | First_Name  |
+| Type        |   | Location   |   | Last_Name   |
++-------------+   +------------+   | Gender      |
+                                    | Age         |
+                                    +-------------+
+                                        |
+                                        |
+                                        |
+                                        |
+                                    +-----------+
+                                    |   Ticket  |
+                                    |-----------|
+                                    | Ticket_ID |
+                                    | Booking_Date |
+                                    | Schedule_ID (FK) |
+                                    | Passenger_ID (FK)|
+                                    +-----------+
+                                         |
+                                         |
+                                         |
+                                         |
+                                    +-----------+
+                                    |   Route   |
+                                    |-----------|
+                                    | Route_ID |
+                                    | Train_ID (FK)|
+                                    | Station_ID (FK)|
+                                    | Sequence_Number |
+                                    +-----------+
+
++-------------+     +-----------+
+|  Schedule   |     |   Route   |
+|-------------|     |-----------|
+| Schedule_ID |     | Route_ID  |
+| Train_ID(FK)|-----| Train_ID(FK)|
+| Departure_Time | | Station_ID(FK)|
+| Arrival_Time   | +-----------+
+| Date          |
++-------------+
+
+CREATE OR REPLACE FUNCTION SumOfDigits(n NUMBER) RETURN NUMBER IS
+    sum_digits NUMBER := 0;
+    digit NUMBER;
+BEGIN
+    WHILE n > 0 LOOP
+        digit := MOD(n, 10);
+        sum_digits := sum_digits + digit;
+        n := TRUNC(n / 10);
+    END LOOP;
+    RETURN sum_digits;
+END;
+/
+
+-- To test the function
+DECLARE
+    result NUMBER;
+BEGIN
+    result := SumOfDigits(12345);
+    DBMS_OUTPUT.PUT_LINE('Sum of digits: ' || result);
+END;
+/
+
+SELECT * 
+FROM Employees 
+WHERE Department = 'IT';
+UPDATE Employees
+SET Salary = new_salary
+WHERE Employee_ID = 3;
+SELECT * 
+FROM Employees 
+WHERE Salary > (SELECT AVG(Salary) FROM Employees);
+SELECT * 
+FROM Employees 
+WHERE Department = 'IT' AND Salary > 70000;
+SELECT SUM(Budget) AS Total_Budget
+FROM Projects
+WHERE Department = 'Marketing';
+SELECT * 
+FROM Employees
+WHERE Salary = (SELECT MAX(Salary) FROM Employees);
+SELECT Employees.Employee_ID, Employees.First_Name, Employees.Last_Name, Projects.Project_Name
+FROM Employees
+JOIN Project_Assignments ON Employees.Employee_ID = Project_Assignments.Employee_ID
+JOIN Projects ON Project_Assignments.Project_ID = Projects.Project_ID;
+SELECT Department, COUNT(*) AS Total_Employees
+FROM Employees
+GROUP BY Department;
