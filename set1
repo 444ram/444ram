@@ -1,0 +1,63 @@
+Customer (CustomerID, Name, Email, Address, PhoneNumber)
+    |
+    | Buys
+    |
+Order (OrderID, OrderDate, TotalAmount, Status)
+    |
+    | Contains
+    |
+OrderItem (OrderItemID, Quantity, Price)
+    |
+    | Lists
+    |
+Book (ISBN, Title, Author, Publisher, Price, Category, Stock)
+    |
+    | Reviews
+    |
+Review (ReviewID, Rating, Comment, ReviewDate)
+    |
+    | Writes
+    |
+Customer
+
+
+CREATE OR REPLACE FUNCTION CalculateFactorial(n IN NUMBER) RETURN NUMBER IS
+  factorial NUMBER := 1;
+BEGIN
+  IF n < 0 THEN
+    RETURN NULL;
+  ELSIF n = 0 THEN
+    RETURN 1;
+  ELSE
+    FOR i IN 1..n LOOP
+      factorial := factorial * i;
+    END LOOP;
+    RETURN factorial;
+  END IF;
+END;
+
+
+SELECT * FROM Nurse WHERE Registered = 'Y';
+
+ALTER TABLE Nurse ADD Phone VARCHAR2(15);
+
+UPDATE Nurse SET Registered = 'N' WHERE Name = 'Laverne Roberts';
+
+CREATE VIEW NurseView AS 
+SELECT Name, Position FROM Nurse;
+
+SELECT Name, Position FROM Nurse
+UNION
+SELECT Name, Position FROM Physician;
+
+SELECT p.Name, d.DepartmentName
+FROM Department d
+JOIN Physician p ON d.HeadID = p.PhysicianID;
+
+SELECT n.Name, d.DepartmentName
+FROM Nurse n
+JOIN Department d ON d.HeadID IN (SELECT PhysicianID FROM Physician WHERE Position = 'Head');
+
+DELETE FROM Department WHERE DepartmentID = 2;
+
+
