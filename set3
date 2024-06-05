@@ -20,12 +20,25 @@ User
     |
 Payment (PaymentID, PaymentDate, Amount, PaymentMethod)
 
-CREATE OR REPLACE FUNCTION CalculateAreaOfCircle(radius IN NUMBER) RETURN NUMBER IS
-  area NUMBER;
+CREATE OR REPLACE PROCEDURE CalculateCircleArea(
+    radius IN NUMBER,
+    area OUT NUMBER
+)
+IS
+    pi CONSTANT NUMBER := 3.14159; -- Assuming pi value
 BEGIN
-  area := 3.14159 * radius * radius;
-  RETURN area;
+    area := pi * radius * radius; -- Area formula for circle: pi * radius^2
 END;
+/
+DECLARE
+    radius_value NUMBER := &radius_value; -- Example radius
+    area_result NUMBER;
+BEGIN
+    CalculateCircleArea(radius_value, area_result);
+    dbms_output.put_line('Area of circle with radius ' || radius_value || ' is: ' || area_result);
+END;
+/
+
 
 UPDATE Physician SET Position = 'Senior Staff Internist' WHERE Name = 'John Dorian';
 
