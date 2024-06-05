@@ -1,0 +1,53 @@
+Patient (PatientID, Name, DOB, Gender, Address)
+    |
+    | AdmittedTo
+    |
+Room (RoomID, RoomNumber, Type, Cost)
+    |
+    | Schedules
+    |
+Appointment (AppointmentID, AppointmentDate, Time, PatientID, PhysicianID)
+    |
+    | BelongsTo
+    |
+Physician (PhysicianID, Name, Specialty, Position, SSN)
+    |
+    | WorksIn
+    |
+Department (DepartmentID, DepartmentName, HeadID)
+    |
+    | WorksIn
+    |
+Nurse (NurseID, Name, Position, SSN)
+    |
+    | Prescribes
+    |
+Prescription (PrescriptionID, Medication, Dosage)
+    |
+    | Undergoes
+    |
+Treatment (TreatmentID, TreatmentName, Description)
+
+CREATE OR REPLACE FUNCTION CalculateArea(
+    length IN NUMBER,
+    width IN NUMBER,
+    area OUT NUMBER
+) RETURN NUMBER IS
+BEGIN
+    area := length * width;
+    RETURN area;
+END;
+
+DESC Nurse;
+DESC Physician;
+SELECT Name FROM Physician WHERE Position = 'Senior Attending';
+SELECT Name FROM Physician 
+WHERE PhysicianID NOT IN (SELECT HeadID FROM Department);
+SELECT Name FROM Physician WHERE Position LIKE 'Surgical%';
+SELECT Name FROM Physician 
+WHERE Position = (SELECT Position FROM Nurse WHERE Name = 'Carla Espinosa');
+ALTER TABLE Physician MODIFY SSN VARCHAR2(15);
+DELETE FROM Department WHERE DepartmentID = 1;
+CREATE VIEW AttendingPhysicians AS
+SELECT Name, SSN FROM Physician WHERE Position = 'Attending Physician';
+
