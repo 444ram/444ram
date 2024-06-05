@@ -1,0 +1,96 @@
++-------------+   +--------------+   +-----------+   +-------------+
+|  Customer   |   |    Order     |   |  Payment  |   |   Supplier   |
+|-------------|   |--------------|   |-----------|   |-------------|
+| Customer_ID |---| Order_ID     |---| Payment_ID|   | Supplier_ID |
+| Name        |   | Order_Date   |   | Amount    |   | Name        |
+| Email       |   | Customer_ID  |   | Payment_Date| | Contact     |
+| Address     |   +--------------+   | Order_ID  |   +-------------+
+| Phone       |                     +-----------+
++-------------+                          |
+                                         |
+                                         |
+                                         |
+                                    +--------------+
+                                    |  Order_Item  |
+                                    |--------------|
+                                    | Order_Item_ID|
+                                    | Order_ID     |
+                                    | Product_ID   |
+                                    | Quantity     |
+                                    | Price        |
+                                    +--------------+
+                                         |
+                                         |
+                                         |
+                                    +-------------+
+                                    |   Product   |
+                                    |-------------|
+                                    | Product_ID  |
+                                    | Name        |
+                                    | Price       |
+                                    | Stock       |
+                                    | Supplier_ID |
+                                    | Category_ID |
+                                    +-------------+
+                                         |
+                                         |
+                                         |
+                                    +-------------+
+                                    |  Category   |
+                                    |-------------|
+                                    | Category_ID |
+                                    | Name        |
+                                    +-------------+
+
+CREATE OR REPLACE TRIGGER Update_Project_Budget
+AFTER UPDATE OF salary ON Employees
+FOR EACH ROW
+DECLARE
+    v_increase_amount NUMBER;
+BEGIN
+    IF :OLD.salary < :NEW.salary THEN
+        v_increase_amount := :NEW.salary - :OLD.salary;
+        UPDATE Projects
+        SET Budget = Budget + v_increase_amount
+        WHERE Project_ID IN (
+            SELECT Project_ID
+            FROM Project_Assignments
+            WHERE Employee_ID = :NEW.Employee_ID
+        );
+    END IF;
+END;
+/
+
+SELECT *
+FROM (
+    SELECT 
+        Project_ID,
+        Project_Name,
+        Budget,
+        Department,
+        ROW_NUMBER() OVER (PARTITION BY Department ORDER BY Budget DESC) AS rn
+    FROM Projects
+) AS ranked_projects
+WHERE rn = 1;
+SELECT SUM(Budget) AS Total_Budget
+FROM Projects;
+CREATE VIEW High_Salary_Employees AS
+SELECT * 
+FROM Employees 
+WHERE Salary > 80000;
+SELECT * 
+FROM Employees 
+WHERE Salary BETWEEN lower_bound AND upper_bound;
+DELETE FROM Employees 
+WHERE Salary < 60000;
+SELECT * 
+FROM Projects 
+WHERE Budget > (SELECT AVG(Budget) FROM Projects);
+SELECT * 
+FROM Projects 
+WHERE Project_Name LIKE 'Web%' 
+ORDER BY Budget;
+SELECT Department, SUM(Budget) AS Total_Budget
+FROM Projects
+GROUP BY Department
+ORDER BY Total_Budget;
