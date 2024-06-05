@@ -42,27 +42,33 @@
 | Date          |
 +-------------+
 
-CREATE OR REPLACE FUNCTION SumOfDigits(n NUMBER) RETURN NUMBER IS
-    sum_digits NUMBER := 0;
-    digit NUMBER;
+SET SERVEROUTPUT ON;
+
+CREATE OR REPLACE PROCEDURE CalculateSumOfDigits (
+    num IN NUMBER,
+    sum_out OUT NUMBER
+)
+IS
+    temp_num NUMBER := ABS(num); -- To handle negative numbers
 BEGIN
-    WHILE n > 0 LOOP
-        digit := MOD(n, 10);
-        sum_digits := sum_digits + digit;
-        n := TRUNC(n / 10);
+    sum_out := 0;
+    
+    WHILE temp_num > 0 LOOP
+        sum_out := sum_out + MOD(temp_num, 10); -- Add the last digit to the sum
+        temp_num := TRUNC(temp_num / 10); -- Remove the last digit
     END LOOP;
-    RETURN sum_digits;
 END;
 /
 
--- To test the function
 DECLARE
-    result NUMBER;
+    input_num NUMBER := &input_num;
+    result_sum NUMBER;
 BEGIN
-    result := SumOfDigits(12345);
-    DBMS_OUTPUT.PUT_LINE('Sum of digits: ' || result);
+    CalculateSumOfDigits(input_num, result_sum);
+    DBMS_OUTPUT.PUT_LINE('Sum of digits of ' || input_num || ' is: ' || result_sum);
 END;
 /
+
 
 SELECT * 
 FROM Employees 
