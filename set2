@@ -1,0 +1,59 @@
+Customer (CustomerID, Name, Email, Address, PhoneNumber)
+    |
+    | Owns
+    |
+Account (AccountID, AccountType, Balance, OpenDate)
+    |
+    | Performs
+    |
+Transaction (TransactionID, TransactionDate, Amount, TransactionType)
+    |
+    | Operates
+    |
+Branch (BranchID, BranchName, BranchAddress)
+    |
+    | LocatedAt
+    |
+ATM (ATMID, Location)
+    |
+    | BelongsTo
+    |
+Customer
+    |
+    | Has
+    |
+Loan (LoanID, LoanType, Amount, InterestRate, LoanDate)
+
+
+CREATE OR REPLACE PROCEDURE CalculateSquareAndCube (
+    n IN NUMBER,
+    square OUT NUMBER,
+    cube OUT NUMBER
+) IS
+BEGIN
+    square := n * n;
+    cube := n * n * n;
+END;
+
+
+
+SELECT * FROM Students WHERE State NOT IN ('Telangana', 'Andhra Pradesh');
+
+CREATE VIEW TelanganaStudents AS
+SELECT Sid, Sname FROM Students WHERE State = 'Telangana';
+
+SELECT * FROM Students WHERE Gender = 'Female' AND Course = 'Compcourse' AND Category = 'OBC';
+
+SELECT Sid, Sname, Percentage FROM Students;
+
+SELECT * FROM Students ORDER BY Course, Sname ASC;
+
+
+DELETE FROM Students WHERE Course = 'Compcourse' AND DOB > TO_DATE('31-12-2002', 'DD-MM-YYYY');
+
+ALTER TABLE Students MODIFY State VARCHAR2(40);
+
+SELECT Sname FROM Students WHERE LENGTH(Sname) = 5;
+
+
+
