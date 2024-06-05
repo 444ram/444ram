@@ -43,6 +43,7 @@
                                     +-------------+
 
 
+SET SERVEROUTPUT ON;
 CREATE OR REPLACE TRIGGER UpdateInstructorName
 AFTER UPDATE OF Instructor_Name ON Students
 FOR EACH ROW
@@ -52,6 +53,13 @@ BEGIN
     WHERE Instructor_Name = :OLD.Instructor_Name;
 END;
 /
+
+CREATE TABLE Student(
+    Students_id NUMBER PRIMARY KEY,
+    Instructor_Name VARCHAR2(100),
+    salary NUMBER
+);
+
 
 ALTER TABLE Students
 ADD Email VARCHAR2(100);
