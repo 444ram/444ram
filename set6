@@ -1,0 +1,50 @@
+Customer (CustomerID, Name, Email, PhoneNumber, Address)
+    |
+    | Places
+    |
+Order (OrderID, OrderDate, TotalAmount, CustomerID)
+    |
+    | Contains
+    |
+OrderItem (OrderItemID, OrderID, MenuID, Quantity)
+    |
+    | Includes
+    |
+Menu (MenuID, RestaurantID, ItemName, Price)
+    |
+    | ListedIn
+    |
+Restaurant (RestaurantID, Name, Address, PhoneNumber)
+    |
+    | Processes
+    |
+Order
+    |
+    | Makes
+    |
+Payment (PaymentID, PaymentDate, Amount, PaymentMethod)
+
+CREATE OR REPLACE PROCEDURE CalculateSquare(
+    number IN NUMBER,
+    square OUT NUMBER
+) IS
+BEGIN
+    square := number * number;
+END;
+
+SELECT SupplierID, SupplierName FROM Supplier WHERE SupplierName LIKE 'R%';
+SELECT SupplierName FROM Supplier 
+WHERE Item = 'Processor' AND City = 'Delhi';
+SELECT DISTINCT SupplierName 
+FROM Supplier 
+WHERE Item IN (SELECT Item FROM Supplier WHERE SupplierName = 'Ramesh');
+UPDATE Supplier SET ItemPrice = ItemPrice + 200 WHERE Item = 'Keyboard';
+SELECT SupplierID, SupplierName, ItemPrice 
+FROM Supplier 
+WHERE City = 'Delhi' 
+ORDER BY ItemPrice ASC;
+ALTER TABLE Supplier ADD CONTACTNO VARCHAR2(15);
+DELETE FROM Supplier 
+WHERE ItemPrice = (SELECT MIN(ItemPrice) FROM Supplier);
+CREATE VIEW SupplierView AS
+SELECT SupplierID, SupplierName FROM Supplier;
