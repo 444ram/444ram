@@ -44,6 +44,13 @@
 +--------------+     +--------------+
 
 
+CREATE TABLE employees (
+    employee_id NUMBER PRIMARY KEY,
+    employee_name VARCHAR2(100),
+    salary NUMBER
+);
+
+
 CREATE OR REPLACE TRIGGER PrintSalaryChanges
 AFTER UPDATE OF salary ON Employees
 FOR EACH ROW
@@ -56,7 +63,6 @@ BEGIN
     DBMS_OUTPUT.PUT_LINE('Salary changed from ' || old_salary || ' to ' || new_salary);
 END;
 /
-
 -- To enable output in SQL*Plus or SQL Developer
 SET SERVEROUTPUT ON;
 
