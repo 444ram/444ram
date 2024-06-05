@@ -1,0 +1,55 @@
+User (UserID, Name, Email, Password, Address, PhoneNumber)
+    |
+    | Lists
+    |
+Item (ItemID, Name, Description, StartingPrice, ReservePrice)
+    |
+    | Contains
+    |
+Auction (AuctionID, StartTime, EndTime, Status)
+    |
+    | PlacedOn
+    |
+Bid (BidID, BidTime, BidAmount)
+    |
+    | BidsOn
+    |
+User
+    |
+    | Makes
+    |
+Payment (PaymentID, PaymentDate, Amount, PaymentMethod)
+
+CREATE OR REPLACE FUNCTION CalculateAreaOfCircle(radius IN NUMBER) RETURN NUMBER IS
+  area NUMBER;
+BEGIN
+  area := 3.14159 * radius * radius;
+  RETURN area;
+END;
+
+UPDATE Physician SET Position = 'Senior Staff Internist' WHERE Name = 'John Dorian';
+
+CREATE VIEW NonInternPhysicians AS
+SELECT Name, Position FROM Physician WHERE Position NOT LIKE '%Intern%';
+
+SELECT * FROM Physician WHERE Position = 'Attending Physician';
+
+SELECT p.Name, 
+       (SELECT d.DepartmentName 
+        FROM Department d 
+        WHERE d.DepartmentID = p.DepartmentID) AS DepartmentName
+FROM Physician p;
+
+SELECT Name FROM Physician WHERE Position LIKE '%Physician%';
+
+SELECT n.Name
+FROM Nurse n
+JOIN Department d ON n.DepartmentID = d.DepartmentID
+WHERE n.Registered = 'Y' AND d.DepartmentName = 'Surgery';
+
+SELECT d.DepartmentName, COUNT(p.PhysicianID) AS TotalPhysicians
+FROM Physician p
+JOIN Department d ON p.DepartmentID = d.DepartmentID
+GROUP BY d.DepartmentName;
+
+DELETE FROM Nurse WHERE Registered = 'N';
