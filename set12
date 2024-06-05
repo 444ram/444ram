@@ -1,0 +1,54 @@
+SELECT *
+FROM emp_details
+ORDER BY dept_no ASC, job DESC;
+ALTER TABLE emp_details
+ADD PF NUMBER(10, 2); -- Assuming PF is of type NUMBER(10, 2)
+SELECT *
+FROM emp_details
+WHERE hiredate < TO_DATE('1981-01-01', 'YYYY-MM-DD');
+SELECT *
+FROM emp_details
+WHERE sal BETWEEN 10000 AND 20000;
+SELECT *
+FROM emp_details
+WHERE emp_name LIKE 'S%';
+SELECT *
+FROM emp_details
+WHERE hiredate BETWEEN TO_DATE('1970-01-01', 'YYYY-MM-DD') AND TO_DATE('1990-01-01', 'YYYY-MM-DD');
+CREATE TABLE table_name (
+    column1 datatype,
+    column2 datatype,
+    ...
+);
+ALTER TABLE table_name
+ADD column_name datatype;
+DROP TABLE table_name;
+TRUNCATE TABLE table_name;
+RENAME old_table_name TO new_table_name;
+DECLARE
+    num1 NUMBER := 10;
+    num2 NUMBER := 20;
+    num3 NUMBER := 30;
+    max_num NUMBER;
+BEGIN
+    max_num := GREATEST(num1, num2, num3);
+    DBMS_OUTPUT.PUT_LINE('Maximum number is: ' || max_num);
+END;
+/
+
+CREATE OR REPLACE TRIGGER Salary_Change
+BEFORE UPDATE OF sal ON emp_details
+FOR EACH ROW
+BEGIN
+    DBMS_OUTPUT.PUT_LINE('Salary changed from ' || :OLD.sal || ' to ' || :NEW.sal);
+END;
+/
+SELECT job, MAX(avg_sal) AS max_avg_salary
+FROM (
+    SELECT job, AVG(sal) AS avg_sal
+    FROM emp_details
+    WHERE job <> 'President'
+    GROUP BY job
+)
+GROUP BY job;
+
