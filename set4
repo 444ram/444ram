@@ -1,0 +1,44 @@
+Book (BookID, Title, Author, Publisher, PublicationYear, ISBN)
+    |
+    | Contains
+    |
+Branch (BranchID, BranchName, Location)
+    |
+    | Borrows
+    |
+Member (MemberID, Name, Address, PhoneNumber, Email)
+    |
+    | Issues
+    |
+Loan (LoanID, LoanDate, ReturnDate)
+    |
+    | Reserves
+    |
+Reservation (ReservationID, ReservationDate)
+    |
+    | AssignedTo
+    |
+Book
+    |
+    | Issues
+    |
+Librarian (LibrarianID, Name, Email, PhoneNumber)
+
+CREATE OR REPLACE FUNCTION CalculateRectangleArea(length IN NUMBER, width IN NUMBER) RETURN NUMBER IS
+  area NUMBER;
+BEGIN
+  area := length * width;
+  RETURN area;
+END;
+
+SELECT * FROM Employee;
+
+SELECT emp_name, salary FROM Employee;
+SELECT DISTINCT designation FROM Employee;
+SELECT emp_name, salary * 1.15 AS increased_salary FROM Employee;
+SELECT emp_id, salary, dept_id FROM Employee;
+SELECT * FROM Employee WHERE join_date < TO_DATE('01-JAN-1991', 'DD-MON-YYYY');
+SELECT AVG(salary) AS average_salary FROM Employee WHERE designation = 'ANALYST';
+CREATE VIEW SpecialEmployees AS
+SELECT * FROM Employee
+WHERE SUBSTR(emp_name, 3, 1) = 'A' AND salary BETWEEN 2600 AND 3200;
