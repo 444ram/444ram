@@ -21,20 +21,33 @@ Review (ReviewID, Rating, Comment, ReviewDate)
 Customer
 
 
-CREATE OR REPLACE FUNCTION CalculateFactorial(n IN NUMBER) RETURN NUMBER IS
-  factorial NUMBER := 1;
+CREATE OR REPLACE FUNCTION CalculateFactorial(
+    n IN NUMBER
+) RETURN NUMBER
+IS
+    factorial NUMBER := 1;
 BEGIN
-  IF n < 0 THEN
-    RETURN NULL;
-  ELSIF n = 0 THEN
-    RETURN 1;
-  ELSE
-    FOR i IN 1..n LOOP
-      factorial := factorial * i;
-    END LOOP;
-    RETURN factorial;
-  END IF;
+    IF n < 0 THEN
+        RETURN NULL; -- Factorial is not defined for negative numbers
+    ELSIF n = 0 THEN
+        RETURN 1; -- Factorial of 0 is 1
+    ELSE
+        FOR i IN 1..n LOOP
+            factorial := factorial * i;
+        END LOOP;
+        RETURN factorial;
+    END IF;
 END;
+/
+DECLARE
+    num_value NUMBER := &num_value; -- Example input number
+    factorial_result NUMBER;
+BEGIN
+    factorial_result := CalculateFactorial(num_value);
+    dbms_output.put_line('Factorial of ' || num_value || ' is: ' || factorial_result);
+END;
+/
+
 
 
 SELECT * FROM Nurse WHERE Registered = 'Y';
