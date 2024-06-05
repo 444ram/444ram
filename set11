@@ -1,0 +1,76 @@
+SELECT Emp_Name, Salary
+FROM Employee;
+
+SELECT Emp_Name
+FROM Employee
+WHERE Salary > 5000;
+
+SELECT Dname, Location
+FROM Department;
+
+SELECT Emp_Name
+FROM Employee E
+JOIN Department D ON E.Dept_no = D.Dept_No
+WHERE D.Dname = 'Sales';
+
+SELECT D.Dname, COUNT(E.Emp_id) AS Total_Employees
+FROM Department D
+LEFT JOIN Employee E ON D.Dept_No = E.Dept_no
+GROUP BY D.Dname;
+
+UPDATE Employee
+SET Salary = 8000
+WHERE Emp_id = 3;
+
+DELETE FROM Employee
+WHERE Emp_id = 4;
+
+SELECT D.Dname, MAX(E.Salary) AS Highest_Salary
+FROM Department D
+LEFT JOIN Employee E ON D.Dept_No = E.Dept_no
+GROUP BY D.Dname;
+
+CREATE VIEW Employees_Salary_Order AS
+SELECT *
+FROM Employee
+ORDER BY Salary ASC;
+
+CREATE OR REPLACE TRIGGER Salary_Check
+BEFORE INSERT ON Employee
+FOR EACH ROW
+BEGIN
+    IF :NEW.Salary < 0 THEN
+        :NEW.Salary := 0;
+    END IF;
+END;
+/
+
+SELECT SUM(Salary) AS Total_Salary
+FROM Employee;
+SELECT AVG(Salary) AS Average_Salary
+FROM Employee;
+SELECT COUNT(*) AS Total_Employees
+FROM Employee;
+SELECT MAX(Salary) AS Highest_Salary
+FROM Employee;
+SELECT MIN(Salary) AS Lowest_Salary
+FROM Employee;
+
++-------------+    +---------------+    +-------------+
+|   Customer  |    | Billing_Detail|    |    Plan     |
+|-------------|    |---------------|    |-------------|
+| Customer_ID |    |    Bill_ID    |    |   Plan_ID   |
+|    Name     |    |  Customer_ID  |    | Plan_Name   |
+|  Address    |    |  Bill_Amount  |    | Description |
+| Phone_Number|    | Billing_Date  |    | Monthly_Cost|
++-------------+    +---------------+    +-------------+
+
++-------------+
+| City_Service|
+|-------------|
+|  City_ID    |
+| City_Name   |
+| Coverage_Area|
++-------------+
+
+
