@@ -25,15 +25,29 @@ Customer
 Loan (LoanID, LoanType, Amount, InterestRate, LoanDate)
 
 
-CREATE OR REPLACE PROCEDURE CalculateSquareAndCube (
-    n IN NUMBER,
+
+  CREATE OR REPLACE PROCEDURE CalculateSquareAndCube(
+    num IN NUMBER,
     square OUT NUMBER,
     cube OUT NUMBER
-) IS
+)
+IS
 BEGIN
-    square := n * n;
-    cube := n * n * n;
+    square := num * num; -- Calculate the square
+    cube := num * num * num; -- Calculate the cube
 END;
+/
+DECLARE
+    num_value NUMBER := &num_value; -- Example input number
+    square_result NUMBER;
+    cube_result NUMBER;
+BEGIN
+    CalculateSquareAndCube(num_value, square_result, cube_result);
+    dbms_output.put_line('Square of ' || num_value || ' is: ' || square_result);
+    dbms_output.put_line('Cube of ' || num_value || ' is: ' || cube_result);
+END;
+/
+
 
 
 
