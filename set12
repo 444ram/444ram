@@ -36,19 +36,19 @@ BEGIN
 END;
 /
 
-CREATE OR REPLACE TRIGGER Salary_Change
-BEFORE UPDATE OF sal ON emp_details
+CREATE OR REPLACE TRIGGER salary_Change
+BEFORE UPDATE OF salary ON employees
 FOR EACH ROW
 BEGIN
-    DBMS_OUTPUT.PUT_LINE('Salary changed from ' || :OLD.sal || ' to ' || :NEW.sal);
+    DBMS_OUTPUT.PUT_LINE('salary changed from ' || :OLD.salary || ' to ' || :NEW.salary);
 END;
 /
-SELECT job, MAX(avg_sal) AS max_avg_salary
+SELECT salary, MAX(avg_salary) AS max_avg_salary
 FROM (
-    SELECT job, AVG(sal) AS avg_sal
-    FROM emp_details
-    WHERE job <> 'President'
-    GROUP BY job
+    SELECT salary, AVG(salary) AS avg_salary
+    FROM employees
+    WHERE salary <> 'President'
+    GROUP BY salary
 )
-GROUP BY job;
+GROUP BY salary;
 
