@@ -1,0 +1,1047 @@
+create or replace Trigger mytrigger 
+before insert on employee
+begin 
+ dbms_output.put_line('Record inserted ');
+end;
+/
+
+
+declare 
+a integer:=&a;
+c integer:=0;
+i integer;
+begin
+   
+   for i in 2 .. a-1
+   loop
+      if (mod(a,i)=0) then
+         c:=c+1;
+     end if;
+    end loop;
+  if c=0 
+then 
+   dbms_output.put_line('Prime number');
+else
+  dbms_output.put_line('Not Prime Number');
+end if;
+end;
+/
+     create or replace procedure swap( num1 in out integer,num2 in out integer)
+Is 
+ temp integer:=0;
+
+begin 
+    temp:=num1;
+    num1:=num2;
+    num2:=temp;  
+end;
+/
+declare 
+  a integer:=&a;
+  b integer:=&b;
+begin 
+  dbms_output.put_line('Before swaping '||a||'  '||b);
+  swap(a,b);
+   dbms_output.put_line('After swaping '||a||'  '||b);
+
+end;
+/
+  
+
+CREATE TABLE empc (
+    emp_id NUMBER PRIMARY KEY,
+    name VARCHAR2(100),
+    hire_date DATE
+    -- other columns
+);
+DECLARE
+    CURSOR emp_cursor IS
+        SELECT empno, ename, hiredate
+        FROM employee
+        WHERE (SYSDATE - hiredate) / 365.25 >= 23;  -- Calculate experience in years
+    emp_record emp_cursor%ROWTYPE;
+BEGIN
+    OPEN emp_cursor;
+    LOOP
+        FETCH emp_cursor INTO emp_record;
+        EXIT WHEN emp_cursor%NOTFOUND;
+        
+        INSERT INTO empc (emp_id, name, hire_date)
+        VALUES (emp_record.empno, emp_record.ename, emp_record.hiredate);
+    END LOOP;
+    CLOSE emp_cursor;
+    
+    COMMIT;
+END;
+/
+
+create or replace procedure revers(ran in out integer)
+Is
+  num1 integer:=0;
+  
+   i integer;
+begin 
+   while (ran>0)
+ loop
+    i:=mod(ran,10);
+    num1:=num1*10+i;
+   ran:=trunc(ran/10); 
+    end loop;
+  dbms_output.put_line('reversed  number  ::'|| num1);
+end;
+/
+declare 
+  a integer:=&a;
+begin 
+  revers(a);
+end;
+/
+  
+
+
+DECLARE
+    v_department_id NUMBER := &department_id;  -- Accept department number as input
+BEGIN
+    FOR emp_record IN (
+        SELECT empno, ename, hiredate, deptno
+        FROM employee
+        WHERE deptno= v_department_id
+    )
+    LOOP
+        DBMS_OUTPUT.PUT_LINE('Emp ID: ' || emp_record.empno);
+        DBMS_OUTPUT.PUT_LINE('Name: ' || emp_record.ename);
+        DBMS_OUTPUT.PUT_LINE('Hire Date: ' || TO_CHAR(emp_record.hiredate, 'YYYY-MM-DD'));
+        DBMS_OUTPUT.PUT_LINE('Department ID: ' || emp_record.deptno);
+        DBMS_OUTPUT.PUT_LINE('-----------------------------');
+    END LOOP;
+END;
+/
+
+create or replace Trigger mytrigger2
+after insert or update on employee
+begin 
+  case  
+   when inserting then 
+ dbms_output.put_line('Record  inserting');
+  when updating then
+    dbms_output.put_line('record updating');
+  end case;
+end;
+/
+
+
+Declare
+a integer :=&a;
+b integer :=&b;
+c integer;
+begin
+ 
+  c:=a+b;
+dbms_output.put_line('sum are '||c);
+end;
+/
+
+DECLARE
+    v_department_id NUMBER := &department_id;  -- Accept department number as input
+BEGIN
+    FOR emp_record IN (
+        SELECT empno, ename, hiredate, deptno
+        FROM employee
+        WHERE deptno= v_department_id
+    )
+    LOOP
+        DBMS_OUTPUT.PUT_LINE('Emp ID: ' || emp_record.empno);
+        DBMS_OUTPUT.PUT_LINE('Name: ' || emp_record.ename);
+        DBMS_OUTPUT.PUT_LINE('Hire Date: ' || TO_CHAR(emp_record.hiredate, 'YYYY-MM-DD'));
+        DBMS_OUTPUT.PUT_LINE('Department ID: ' || emp_record.deptno);
+        DBMS_OUTPUT.PUT_LINE('-----------------------------');
+    END LOOP;
+END;
+/
+
+Declare 
+   a integer :=&a;
+   i integer;
+   
+begin
+  for i in 1 .. a
+   loop
+      if (mod(i,2)=0) then
+         dbms_output.put_line('even '||i);
+     -- else
+     -- dbms_output.put_line('odd '||i);
+    end if;
+  end loop;
+end;
+/
+
+
+create or replace procedure palind(ran in out integer,res in out integer)
+Is
+  num1 integer:=0;
+  
+   i integer;
+ su integer:=ran;
+begin 
+   while (ran>0)
+ loop
+    i:=mod(ran,10);
+    num1:=num1*10+i;
+   ran:=trunc(ran/10); 
+    end loop;
+ if (su=num1) then
+    res:=1;
+else
+   res:=0;
+end if;
+end;
+/
+declare 
+  a integer:=&a;
+  b integer:=0;
+begin 
+  palind(a,b);
+   if (b=1) then 
+   dbms_output.put_line(' Palindrome');
+   else 
+  dbms_output.put_line('Not Palindrome');
+  end if;
+end;
+/
+
+
+DECLARE
+    
+  e employee%rowtype;
+ empno employee.ename%type;
+    
+BEGIN
+   update  employee set ename=upper(ename);
+  if sql%found then
+    DBMS_OUTPUT.PUT_LINE(sql%rowcount||' values updated to uppercase.');
+   else 
+    dbms_output.put_line('not found');
+   end if;
+END;
+/
+
+
+declare 
+a integer:=&a;
+c integer:=0;
+i integer;
+begin
+   
+   for i in 1 .. a-1
+   loop
+      if (mod(a,i)=0) then
+         c:=c+i;
+     end if;
+    end loop;
+  if c=a 
+then 
+   dbms_output.put_line('Perfect number');
+else
+  dbms_output.put_line('Not Perfect number');
+end if;
+end;
+/
+     
+
+create or replace FUNCTION  factorial(num in integer) return integer
+Is 
+i integer;
+res integer:=1;
+BEGIN
+  for i in 1 .. num
+   loop
+    res:=res*i;
+   end loop;
+  return res;
+end;
+/
+declare 
+ a integer:=&a;
+begin
+  dbms_output.put_line('factorial :'||factorial(a));
+end;
+/
+
+declare
+    cursor c1 is select * from employee;
+   e employee%rowtype;
+ begin
+   open c1;
+   loop
+    fetch c1 into e;
+   exit when c1%notfound;
+   dbms_output.put_line(e.empno||'    ' ||e.ename||'    '||e.sal);
+  end loop;
+end;
+/
+
+
+create or replace FUNCTION  gcd(num1 IN out NUMBER, num2 IN out NUMBER) return  NUMBER 
+Is
+  t NUMBER:=1;
+BEGIN
+	while (mod(num2, num1)!=0)
+            loop
+		t := mod(num2, num1); 
+
+		num2 := num1; 
+
+		num1 := t; 
+	end loop; 
+
+  return num1;  
+  end;
+/
+
+DECLARE
+  num1 NUMBER := 56;  -- First number
+  num2 NUMBER := 98;  -- Second number
+  gcd_result NUMBER;  -- Variable to store the result
+BEGIN
+    gcd_result := gcd(num1, num2);
+  
+  -- Output the result
+  DBMS_OUTPUT.PUT_LINE('The GCD of ' || num1 || ' and ' || num2 || ' is ' || gcd_result);
+END;
+/
+
+
+declare 
+    str varchar(2);
+begin
+   str:='sa';
+   exception
+      when value_error then
+    dbms_output.put_line('invalid input');
+ end;
+/
+
+
+create or replace Trigger mytrigger1 
+after insert on employee
+begin 
+ dbms_output.put_line('Record inserted using after');
+end;
+/
+
+declare
+  cursor c1 is select * from employee;
+  e employee%rowtype;
+begin 
+  open c1;
+  loop
+   fetch c1 into e;
+      exit when c1%rowcount>5;
+     dbms_output.put_line(e.empno||'     '||e.ename);
+   end loop;
+end;
+/
+
+DECLARE
+    threshold_salary NUMBER := &threshold_salary; -- You can change this value as needed
+BEGIN
+    -- Using an implicit cursor to update the salary
+    UPDATE employee
+    SET sal = sal * 1.2
+    WHERE sal > threshold_salary;
+
+    -- Display the number of rows updated
+    DBMS_OUTPUT.PUT_LINE(SQL%ROWCOUNT || ' rows updated.');
+END;
+/
+
+
+DECLARE
+    v_count NUMBER;
+BEGIN
+    -- Open implicit cursor
+    SELECT COUNT(*)
+    INTO v_count
+    FROM employee;
+
+    IF v_count > 0 THEN
+        DBMS_OUTPUT.PUT_LINE('At least one row satisfies the condition::  '||v_count);
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('No rows satisfy the condition.');
+    END IF;
+END;
+/
+
+declare
+    neg exception;
+    s employee.empno%type:=&empno;
+begin
+  if (s<0) then 
+      raise neg;
+   else 
+       dbms_output.put_line('record inseted');
+   end if;
+ exception
+   when neg then 
+    dbms_output.put_line('negative number ');
+end;
+/
+
+CREATE OR REPLACE FUNCTION power(x IN NUMBER, n IN NUMBER) RETURN NUMBER IS
+  result NUMBER := 1; -- Variable to store the result
+  i NUMBER := 0; -- Loop counter
+BEGIN
+        FOR i IN 1..n LOOP
+      result := result * x;
+    END LOOP;
+    RETURN result;
+END;
+/
+
+declare 
+ a integer:=&a;
+  b integer:=&b;
+begin
+    
+  dbms_output.put_line('factorial :'||power(a,b));
+end;
+/
+
+create or replace procedure fibnoci(ran in out integer)
+Is 
+ temp integer:=0;
+  num1 integer:=0;
+  num2 integer:=1;
+   i integer;
+begin 
+   dbms_output.put_line(num1);
+  dbms_output.put_line(num2);
+   for i in 1 .. (ran-2)
+      loop
+         
+         temp:=num1+num2;
+         num1:=num2;
+         num2:=temp;
+       dbms_output.put_line(temp);
+         
+    end loop;
+end;
+/
+declare 
+  a integer:=&a;
+begin 
+  fibnoci(a);
+end;
+/
+
+
+declare
+cursor c1 is select * from employee;
+e employee%rowtype;
+begin
+ close c1;
+exception 
+    when invalid_cursor then
+      dbms_output.put_line('invalid cursor');
+end;
+/
+
+declare 
+   invalid_sal Exception;
+   s employee.sal%type:=&sal;
+begin 
+   if (s<3000) then
+     raise invalid_sal;
+   else
+     insert into employee(sal) values(s);
+     dbms_output.put_line('Record inserted');
+   end if;
+Exception
+      when invalid_sal then
+           dbms_output.put_line('sal greater ');
+end;
+/
+
+
+Here are the detailed solutions to the questions in each set from the provided document:
+
+### SET-1
+
+1. **Draw an ER Diagram using basic and advanced ER concepts for an Online book store:**
+   - Identify entities such as `Books`, `Authors`, `Customers`, `Orders`, `Reviews`.
+   - Relationships could include `authored_by` between `Books` and `Authors`, `placed_by` between `Orders` and `Customers`, `reviews` between `Customers` and `Books`.
+
+2. **Create a PL/SQL function to calculate the factorial of a number:**
+   ```sql
+   CREATE OR REPLACE FUNCTION calculate_factorial(n IN NUMBER) RETURN NUMBER IS
+     result NUMBER := 1;
+   BEGIN
+     FOR i IN 1..n LOOP
+       result := result * i;
+     END LOOP;
+     RETURN result;
+   END;
+   ```
+
+3. **Retrieve all nurses who are registered:**
+   ```sql
+   SELECT * FROM Nurse WHERE registered = 'Y';
+   ```
+
+4. **Add a new column "phone" to the nurse table:**
+   ```sql
+   ALTER TABLE Nurse ADD phone VARCHAR2(15);
+   ```
+
+5. **Update the registered status of Nurse 'Laverne Roberts' to 'N':**
+   ```sql
+   UPDATE Nurse SET registered = 'N' WHERE name = 'Laverne Roberts';
+   ```
+
+6. **Create a view to display the names and positions of nurses:**
+   ```sql
+   CREATE VIEW NurseNamesPositions AS
+   SELECT name, position FROM Nurse;
+   ```
+
+7. **Retrieve the names and positions of all employees (nurses and physicians):**
+   ```sql
+   SELECT name, position FROM Nurse
+   UNION
+   SELECT name, position FROM Physician;
+   ```
+
+8. **Retrieve the names of all department heads and their respective department names:**
+   ```sql
+   SELECT d.name AS DepartmentName, e.name AS DepartmentHead
+   FROM Department d
+   JOIN Employee e ON d.head_id = e.id;
+   ```
+
+9. **Retrieve the names of nurses and their respective departments (using nested queries):**
+   ```sql
+   SELECT n.name, d.name AS DepartmentName
+   FROM Nurse n
+   JOIN Department d ON n.department_id = d.id;
+   ```
+
+10. **Remove the department with department id 2 from the department table:**
+    ```sql
+    DELETE FROM Department WHERE id = 2;
+    ```
+
+### SET-2
+
+1. **Draw an ER Diagram using basic and advanced ER concepts for Online banking:**
+   - Entities: `Customers`, `Accounts`, `Transactions`, `Loans`.
+   - Relationships: `holds` between `Customers` and `Accounts`, `performs` between `Accounts` and `Transactions`, `has_loan` between `Customers` and `Loans`.
+
+2. **Create a PL/SQL procedure with an OUT parameter to calculate the square and cube of a number:**
+   ```sql
+   CREATE OR REPLACE PROCEDURE calc_square_cube (n IN NUMBER, square OUT NUMBER, cube OUT NUMBER) AS
+   BEGIN
+     square := n * n;
+     cube := n * n * n;
+   END;
+   ```
+
+3. **Write a SQL query to display the students who are not from Telangana or Andhra Pradesh:**
+   ```sql
+   SELECT * FROM Students WHERE state NOT IN ('Telangana', 'Andhra Pradesh');
+   ```
+
+4. **Create a view to display the columns Sid Sname for students belonging to Telangana:**
+   ```sql
+   CREATE VIEW TelanganaStudents AS
+   SELECT Sid, Sname FROM Students WHERE state = 'Telangana';
+   ```
+
+5. **Display all the female students enrolled under Compcourse and who belong to OBC:**
+   ```sql
+   SELECT * FROM Students WHERE gender = 'Female' AND course = 'Compcourse' AND category = 'OBC';
+   ```
+
+6. **Display the student ids, names, and their percentage:**
+   ```sql
+   SELECT Sid, Sname, (marks_obtained/total_marks)*100 AS percentage FROM Students;
+   ```
+
+7. **Display the students in the ascending order of their names for each course:**
+   ```sql
+   SELECT * FROM Students ORDER BY course, Sname ASC;
+   ```
+
+8. **Write a SQL query to delete all the students' records who have enrolled for Compcourse and who are born after 2002:**
+   ```sql
+   DELETE FROM Students WHERE course = 'Compcourse' AND birth_date > DATE '2002-01-01';
+   ```
+
+9. **Write a SQL query to resize the column state to varchar2(40):**
+   ```sql
+   ALTER TABLE Students MODIFY state VARCHAR2(40);
+   ```
+
+10. **Write a SQL query to display all the student names where the length of the name is 5 characters:**
+    ```sql
+    SELECT Sname FROM Students WHERE LENGTH(Sname) = 5;
+    ```
+
+### SET-3
+
+1. **Draw an ER Diagram using basic and advanced ER concepts for Online Auction System:**
+   - Entities: `Auctions`, `Bidders`, `Items`, `Bids`.
+   - Relationships: `places` between `Bidders` and `Bids`, `belongs_to` between `Bids` and `Auctions`, `offers` between `Auctions` and `Items`.
+
+2. **Write a PL/SQL program to find the area of a circle:**
+   ```sql
+   CREATE OR REPLACE PROCEDURE find_area_circle (radius IN NUMBER, area OUT NUMBER) AS
+   BEGIN
+     area := 3.14159 * radius * radius;
+   END;
+   ```
+
+3. **Change the position of Physician 'John Dorian' to 'Senior Staff Internist':**
+   ```sql
+   UPDATE Physician SET position = 'Senior Staff Internist' WHERE name = 'John Dorian';
+   ```
+
+4. **Create a view to display the names and positions of physicians who are not interns:**
+   ```sql
+   CREATE VIEW PhysiciansNotInterns AS
+   SELECT name, position FROM Physician WHERE position != 'Intern';
+   ```
+
+5. **Retrieve all physicians who are attending physicians:**
+   ```sql
+   SELECT * FROM Physician WHERE position = 'Attending Physician';
+   ```
+
+6. **Retrieve the names of physicians and the departments they belong to (using nested queries):**
+   ```sql
+   SELECT p.name, d.name AS DepartmentName
+   FROM Physician p
+   JOIN Department d ON p.department_id = d.id;
+   ```
+
+7. **Retrieve the names of physicians who have "Physician" in their position:**
+   ```sql
+   SELECT name FROM Physician WHERE position LIKE '%Physician%';
+   ```
+
+8. **Retrieve the names of nurses who are registered and belong to the Surgery department:**
+   ```sql
+   SELECT n.name FROM Nurse n
+   JOIN Department d ON n.department_id = d.id
+   WHERE n.registered = 'Y' AND d.name = 'Surgery';
+   ```
+
+9. **Retrieve the names and total number of physicians in each department:**
+   ```sql
+   SELECT d.name AS DepartmentName, COUNT(p.id) AS NumberOfPhysicians
+   FROM Department d
+   JOIN Physician p ON d.id = p.department_id
+   GROUP BY d.name;
+   ```
+
+10. **Delete all nurses who are not registered:**
+    ```sql
+    DELETE FROM Nurse WHERE registered = 'N';
+    ```
+
+### SET-4
+
+1. **Draw an ER Diagram using basic and advanced ER concepts for Library Management system:**
+   - Entities: `Books`, `Authors`, `Members`, `Loans`.
+   - Relationships: `written_by` between `Books` and `Authors`, `borrowed_by` between `Loans` and `Members`, `contains` between `Loans` and `Books`.
+
+2. **Create a PL/SQL function with parameters to calculate the area of a rectangle:**
+   ```sql
+   CREATE OR REPLACE FUNCTION calculate_area_rectangle(length IN NUMBER, width IN NUMBER) RETURN NUMBER IS
+     area NUMBER;
+   BEGIN
+     area := length * width;
+     RETURN area;
+   END;
+   ```
+
+3. **Write a query in SQL to display all the information of the employees:**
+   ```sql
+   SELECT * FROM Employees;
+   ```
+
+4. **Write a query in SQL to find the salaries of all employees:**
+   ```sql
+   SELECT Salary FROM Employees;
+   ```
+
+5. **Write a query in SQL to display the unique designations for the employees:**
+   ```sql
+   SELECT DISTINCT Designation FROM Employees;
+   ```
+
+6. **Write a query in SQL to list the emp_name and salary increased by 15%:**
+   ```sql
+   SELECT emp_name, salary * 1.15 AS IncreasedSalary FROM Employees;
+   ```
+
+7. **Write a query in SQL to list the emp_id, salary, and dept_id of all the employees:**
+   ```sql
+   SELECT emp_id, salary, dept_id FROM Employees;
+   ```
+
+8. **Write a query in SQL to list the employees who joined before 1991:**
+   ```sql
+   SELECT * FROM Employees WHERE joining_date < DATE '1991-01-01';
+   ```
+
+9. **Write a query in SQL to display the average salaries of all the employees who work as ANALYST:**
+   ```sql
+   SELECT AVG(salary) AS AvgSalary FROM Employees WHERE designation = 'ANALYST';
+   ```
+
+10. **Create a view to display the employees whose name consists third letter as ‘A’ and salary is between 2600 to 3200:**
+    ```sql
+    CREATE VIEW SpecificEmployees
+
+ AS
+    SELECT * FROM Employees
+    WHERE SUBSTR(emp_name, 3, 1) = 'A' AND salary BETWEEN 2600 AND 3200;
+    ```
+
+### SET-5
+
+1. **Draw an ER Diagram using basic and advanced ER concepts for Hospital Management system:**
+   - Entities: `Patients`, `Doctors`, `Nurses`, `Departments`, `Appointments`.
+   - Relationships: `assigned_to` between `Patients` and `Doctors`, `works_in` between `Nurses` and `Departments`, `scheduled_for` between `Appointments` and `Patients`.
+
+2. **Write a PL/SQL Function program to use INOUT:**
+   ```sql
+   CREATE OR REPLACE PROCEDURE calc_area_perimeter_rectangle(length IN NUMBER, width IN NUMBER, area OUT NUMBER, perimeter OUT NUMBER) AS
+   BEGIN
+     area := length * width;
+     perimeter := 2 * (length + width);
+   END;
+   ```
+
+3. **Display the structure of nurse and physician tables:**
+   ```sql
+   DESC Nurse;
+   DESC Physician;
+   ```
+
+4. **Retrieve the names of all physicians who have a Senior Attending position:**
+   ```sql
+   SELECT name FROM Physician WHERE position = 'Senior Attending';
+   ```
+
+5. **Retrieve the names of physicians who are not heads of any department:**
+   ```sql
+   SELECT p.name FROM Physician p
+   LEFT JOIN Department d ON p.id = d.head_id
+   WHERE d.head_id IS NULL;
+   ```
+
+6. **Retrieve the names of physicians whose positions start with 'Surgical':**
+   ```sql
+   SELECT name FROM Physician WHERE position LIKE 'Surgical%';
+   ```
+
+7. **Retrieve the names of physicians who have the same position as Nurse 'Carla Espinosa':**
+   ```sql
+   SELECT p.name FROM Physician p
+   JOIN Nurse n ON p.position = n.position
+   WHERE n.name = 'Carla Espinosa';
+   ```
+
+8. **Modify the data type of the "ssn" column in the physician table:**
+   ```sql
+   ALTER TABLE Physician MODIFY ssn VARCHAR2(20);
+   ```
+
+9. **Remove the department with department id 1 from the department table:**
+    ```sql
+    DELETE FROM Department WHERE id = 1;
+    ```
+
+10. **Create a view to display the names and SSNs of physicians with the position 'Attending Physician':**
+    ```sql
+    CREATE VIEW AttendingPhysicians AS
+    SELECT name, ssn FROM Physician WHERE position = 'Attending Physician';
+    ```
+
+### SET-6
+
+1. **Draw an ER Diagram using basic and advanced ER concepts for Online food order system:**
+   - Entities: `Customers`, `Restaurants`, `Orders`, `MenuItems`, `Delivery`.
+   - Relationships: `places` between `Customers` and `Orders`, `contains` between `Orders` and `MenuItems`, `delivered_by` between `Delivery` and `Orders`.
+
+2. **Create a PL/SQL procedure with parameters to calculate the square of a number:**
+   ```sql
+   CREATE OR REPLACE PROCEDURE calc_square (n IN NUMBER, square OUT NUMBER) AS
+   BEGIN
+     square := n * n;
+   END;
+   ```
+
+3. **Display Supplier numbers and Supplier names whose name starts with ‘R’:**
+   ```sql
+   SELECT supplier_number, supplier_name FROM Suppliers WHERE supplier_name LIKE 'R%';
+   ```
+
+4. **Display the name of suppliers who supply Processors and whose city is Delhi:**
+   ```sql
+   SELECT s.supplier_name FROM Suppliers s
+   JOIN Supplies sp ON s.supplier_id = sp.supplier_id
+   WHERE sp.item_name = 'Processor' AND s.city = 'Delhi';
+   ```
+
+5. **Display the names of suppliers who supply the same items as supplied by Ramesh:**
+   ```sql
+   SELECT DISTINCT s2.supplier_name FROM Suppliers s1
+   JOIN Supplies sp1 ON s1.supplier_id = sp1.supplier_id
+   JOIN Supplies sp2 ON sp1.item_name = sp2.item_name
+   JOIN Suppliers s2 ON sp2.supplier_id = s2.supplier_id
+   WHERE s1.supplier_name = 'Ramesh' AND s2.supplier_name != 'Ramesh';
+   ```
+
+6. **Write a SQL query to increase the price of Keyboard by 200:**
+   ```sql
+   UPDATE Items SET price = price + 200 WHERE item_name = 'Keyboard';
+   ```
+
+7. **Write a SQL query to display supplier numbers, supplier names, and item_price for suppliers in Delhi in the ascending order of item_price:**
+   ```sql
+   SELECT s.supplier_number, s.supplier_name, i.price
+   FROM Suppliers s
+   JOIN Supplies sp ON s.supplier_id = sp.supplier_id
+   JOIN Items i ON sp.item_id = i.item_id
+   WHERE s.city = 'Delhi'
+   ORDER BY i.price ASC;
+   ```
+
+8. **Write a SQL query to add a new column called CONTACTNO:**
+   ```sql
+   ALTER TABLE Suppliers ADD CONTACTNO VARCHAR2(15);
+   ```
+
+9. **Delete the record whose item_price is the lowest of all the items supplied:**
+   ```sql
+   DELETE FROM Items WHERE price = (SELECT MIN(price) FROM Items);
+   ```
+
+10. **Create a view on the table which displays only supplier numbers and supplier names:**
+    ```sql
+    CREATE VIEW SupplierInfo AS
+    SELECT supplier_number, supplier_name FROM Suppliers;
+    ```
+
+### SET-7
+
+1. **Draw an ER Diagram using basic and advanced ER concepts for Hotel Management system:**
+   - Entities: `Guests`, `Rooms`, `Reservations`, `Services`, `Staff`.
+   - Relationships: `reserves` between `Guests` and `Reservations`, `provides` between `Services` and `Guests`, `assigned_to` between `Staff` and `Rooms`.
+
+2. **Write a PL/SQL Program to print the salary changes when the salary is changed by using a trigger:**
+   ```sql
+   CREATE OR REPLACE TRIGGER salary_change_trigger
+   BEFORE UPDATE OF salary ON Employees
+   FOR EACH ROW
+   BEGIN
+     DBMS_OUTPUT.PUT_LINE('Old Salary: ' || :OLD.salary || ', New Salary: ' || :NEW.salary);
+   END;
+   ```
+
+3. **Find courses with credit hours greater than the average:**
+   ```sql
+   SELECT * FROM Courses WHERE credit_hours > (SELECT AVG(credit_hours) FROM Courses);
+   ```
+
+4. **Retrieve students with last name starting with 'D':**
+   ```sql
+   SELECT * FROM Students WHERE last_name LIKE 'D%';
+   ```
+
+5. **Change the instructor's name of a specific course:**
+   ```sql
+   UPDATE Courses SET instructor_name = 'New Instructor' WHERE course_id = 101;
+   ```
+
+6. **Create a view for students with GPA > 3.8:**
+   ```sql
+   CREATE VIEW HighGPAStudents AS
+   SELECT * FROM Students WHERE GPA > 3.8;
+   ```
+
+7. **Find courses taken by students with high GPA:**
+   ```sql
+   SELECT DISTINCT c.course_name FROM Courses c
+   JOIN Enrollments e ON c.course_id = e.course_id
+   JOIN Students s ON e.student_id = s.student_id
+   WHERE s.GPA > 3.8;
+   ```
+
+8. **Retrieve students enrolled in multiple courses:**
+   ```sql
+   SELECT s.student_name FROM Students s
+   JOIN Enrollments e ON s.student_id = e.student_id
+   GROUP BY s.student_name HAVING COUNT(e.course_id) > 1;
+   ```
+
+9. **Count students enrolled in courses with credit hours less than 4:**
+   ```sql
+   SELECT c.course_name, COUNT(e.student_id) AS NumberOfStudents
+   FROM Courses c
+   JOIN Enrollments e ON c.course_id = e.course_id
+   WHERE c.credit_hours < 4
+   GROUP BY c.course_name;
+   ```
+
+10. **Alter the students table to add a new column 'Rank':**
+    ```sql
+    ALTER TABLE Students ADD Rank NUMBER;
+    ```
+
+### SET-8
+
+1. **Draw an ER Diagram using basic and advanced ER concepts for “Flipkart”:**
+   - Entities: `Users`, `Products`, `Orders`, `Categories`, `Reviews`.
+   - Relationships: `places` between `Users` and `Orders`, `contains` between `Orders` and `Products`, `categorized_as` between `Products` and `Categories`.
+
+2. **Create a trigger to update the Instructor's Name in Courses table when it is updated in Students table:**
+   ```sql
+   CREATE OR REPLACE TRIGGER update_instructor_name
+   AFTER UPDATE OF instructor_name ON Students
+   FOR EACH ROW
+   BEGIN
+     UPDATE Courses SET instructor_name = :NEW.instructor_name
+     WHERE instructor_id = :OLD.instructor_id;
+   END;
+   ```
+
+3. **Alter students table to add Email column:**
+   ```sql
+   ALTER TABLE Students ADD Email VARCHAR2(50);
+   ```
+
+4. **Update Email for a specific student:**
+   ```sql
+   UPDATE Students SET Email = 'newemail@example.com' WHERE student_id = 101;
+   ```
+
+5. **Find courses with enrollments having students with GPA less than any specific value:**
+   ```sql
+   SELECT DISTINCT c.course_name FROM Courses c
+   JOIN Enrollments e ON c.course_id = e.course_id
+   JOIN Students s ON e.student_id = s.student_id
+   WHERE s.GPA <
+
+ 3.0;
+   ```
+
+6. **Create a view for students in a specific course:**
+   ```sql
+   CREATE VIEW SpecificCourseStudents AS
+   SELECT s.student_name FROM Students s
+   JOIN Enrollments e ON s.student_id = e.student_id
+   WHERE e.course_id = 101;
+   ```
+
+7. **Retrieve students enrolled in courses taught by a specific instructor:**
+   ```sql
+   SELECT s.student_name FROM Students s
+   JOIN Enrollments e ON s.student_id = e.student_id
+   JOIN Courses c ON e.course_id = c.course_id
+   WHERE c.instructor_name = 'Dr. Smith';
+   ```
+
+8. **Count the number of students per course:**
+   ```sql
+   SELECT c.course_name, COUNT(e.student_id) AS NumberOfStudents
+   FROM Courses c
+   JOIN Enrollments e ON c.course_id = e.course_id
+   GROUP BY c.course_name;
+   ```
+
+9. **Find courses not taken by any students:**
+   ```sql
+   SELECT * FROM Courses c
+   WHERE NOT EXISTS (
+     SELECT 1 FROM Enrollments e WHERE c.course_id = e.course_id
+   );
+   ```
+
+10. **Alter the table to drop the Email column:**
+    ```sql
+    ALTER TABLE Students DROP COLUMN Email;
+    ```
+
+### SET-9
+
+1. **Draw an ER Diagram using basic and advanced ER concepts for Inventory Management System:**
+   - Entities: `Products`, `Suppliers`, `Orders`, `Warehouses`.
+   - Relationships: `supplies` between `Suppliers` and `Products`, `stored_in` between `Products` and `Warehouses`, `contains` between `Orders` and `Products`.
+
+2. **Create a trigger to log changes in inventory quantities:**
+   ```sql
+   CREATE OR REPLACE TRIGGER log_inventory_changes
+   AFTER UPDATE OF quantity ON Inventory
+   FOR EACH ROW
+   BEGIN
+     INSERT INTO InventoryLog (product_id, old_quantity, new_quantity, change_date)
+     VALUES (:OLD.product_id, :OLD.quantity, :NEW.quantity, SYSDATE);
+   END;
+   ```
+
+3. **Add a new column 'Discount' to the Orders table:**
+   ```sql
+   ALTER TABLE Orders ADD Discount NUMBER(5,2);
+   ```
+
+4. **Update the discount for a specific order:**
+   ```sql
+   UPDATE Orders SET Discount = 10 WHERE order_id = 102;
+   ```
+
+5. **Find products with quantity less than a specified threshold:**
+   ```sql
+   SELECT * FROM Products WHERE quantity < 50;
+   ```
+
+6. **Create a view to display the details of products from a specific supplier:**
+   ```sql
+   CREATE VIEW SupplierProducts AS
+   SELECT p.* FROM Products p
+   JOIN Supplies s ON p.product_id = s.product_id
+   WHERE s.supplier_id = 201;
+   ```
+
+7. **Retrieve orders containing products from a specific warehouse:**
+   ```sql
+   SELECT o.order_id, o.order_date FROM Orders o
+   JOIN OrderDetails od ON o.order_id = od.order_id
+   JOIN Products p ON od.product_id = p.product_id
+   WHERE p.warehouse_id = 301;
+   ```
+
+8. **Count the number of products supplied by each supplier:**
+   ```sql
+   SELECT s.supplier_name, COUNT(p.product_id) AS NumberOfProducts
+   FROM Suppliers s
+   JOIN Supplies sp ON s.supplier_id = sp.supplier_id
+   JOIN Products p ON sp.product_id = p.product_id
+   GROUP BY s.supplier_name;
+   ```
+
+9. **Find suppliers who do not supply any products:**
+   ```sql
+   SELECT * FROM Suppliers s
+   WHERE NOT EXISTS (
+     SELECT 1 FROM Supplies sp WHERE s.supplier_id = sp.supplier_id
+   );
+   ```
+
+10. **Alter the Orders table to drop the Di
+    ```sql
+    ALTER TABLE Orders DROP COLUMN Discount;
+    ```
+ 
