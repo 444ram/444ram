@@ -1,1 +1,92 @@
++-------------+   +--------------+   +-----------+   +-------------+
+|  Customer   |   |    Order     |   |  Payment  |   |    Vendor   |
+|-------------|   |--------------|   |-----------|   |-------------|
+| Customer_ID |---| Order_ID     |---| Payment_ID|   | Vendor_ID   |
+| Name        |   | Order_Date   |   | Amount    |   | Name        |
+| Email       |   | Customer_ID  |   | Payment_Date| | Contact     |
+| Address     |   +--------------+   | Order_ID  |   +-------------+
+| Phone       |                     +-----------+
++-------------+                          |
+                                         |
+                                         |
+                                         |
+                                    +--------------+
+                                    |  Order_Item  |
+                                    |--------------|
+                                    | Order_Item_ID|
+                                    | Order_ID     |
+                                    | Product_ID   |
+                                    | Quantity     |
+                                    | Price        |
+                                    +--------------+
+                                         |
+                                         |
+                                         |
+                                    +-------------+
+                                    |   Product   |
+                                    |-------------|
+                                    | Product_ID  |
+                                    | Name        |
+                                    | Price       |
+                                    | Stock       |
+                                    | Vendor_ID   |
+                                    | Category_ID |
+                                    +-------------+
+                                         |
+                                         |
+                                         |
+                                    +-------------+
+                                    |  Category   |
+                                    |-------------|
+                                    | Category_ID |
+                                    | Name        |
+                                    +-------------+
+
+
+CREATE OR REPLACE TRIGGER UpdateInstructorName
+AFTER UPDATE OF Instructor_Name ON Students
+FOR EACH ROW
+BEGIN
+    UPDATE Courses
+    SET Instructor_Name = :NEW.Instructor_Name
+    WHERE Instructor_Name = :OLD.Instructor_Name;
+END;
+/
+
+ALTER TABLE Students
+ADD Email VARCHAR2(100);
+
+UPDATE Students
+SET Email = 'new_email@example.com'
+WHERE Student_ID = specific_student_id;
+
+SELECT Course_Name
+FROM Courses
+WHERE Course_ID IN (
+    SELECT Course_ID
+    FROM Enrollment
+    JOIN Students ON Enrollment.Student_ID = Students.Student_ID
+    WHERE Students.GPA < specific_value
+);
+
+SELECT Course_Name
+FROM Courses
+WHERE Credit_Hours > (SELECT AVG(Credit_Hours) FROM Courses);
+
+SELECT * 
+FROM Students 
+WHERE Last_Name LIKE '%son';
+
+SELECT Birthdate, COUNT(*) AS Student_Count
+FROM Students
+GROUP BY Birthdate;
+
+SELECT Birthdate
+FROM Students
+GROUP BY Birthdate
+HAVING COUNT(*) > 1;
+
+UPDATE Courses
+SET Instructor_Name = 'New Instructor'
+WHERE Course_ID = specific_course_id;
 
