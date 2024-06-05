@@ -24,12 +24,27 @@ Book
     |
 Librarian (LibrarianID, Name, Email, PhoneNumber)
 
-CREATE OR REPLACE FUNCTION CalculateRectangleArea(length IN NUMBER, width IN NUMBER) RETURN NUMBER IS
-  area NUMBER;
+CREATE OR REPLACE FUNCTION CalculateRectangleArea(
+    length IN NUMBER,
+    width IN NUMBER
+) RETURN NUMBER
+IS
+    area NUMBER;
 BEGIN
-  area := length * width;
-  RETURN area;
+    area := length * width; -- Area formula for rectangle: length * width
+    RETURN area;
 END;
+/
+DECLARE
+    length_value NUMBER := &length_value; -- Example length
+    width_value NUMBER := &width_value;  -- Example width
+    area_result NUMBER;
+BEGIN
+    area_result := CalculateRectangleArea(length_value, width_value);
+    dbms_output.put_line('Area of rectangle with length ' || length_value || ' and width ' || width_value || ' is: ' || area_result);
+END;
+/
+
 
 SELECT * FROM Employee;
 
